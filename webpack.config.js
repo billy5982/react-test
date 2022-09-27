@@ -11,7 +11,7 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname + "/docs"),
   },
-  mode: "none",
+  mode: "production",
   devServer: {
     static: {
       directory: path.resolve(__dirname, "/docs"),
@@ -22,17 +22,24 @@ module.exports = {
     rules: [
       {
         test: /\.html$/,
-        use: ["html-loader"],
+        loader: "html-loader",
+        options: {
+          minimize: true,
+        },
+        // use: ["html-loader"],
       },
       {
         test: /\.(js|jsx)$/,
-        // loader: "babel-loader",
-        // options: {
-        //   presets: ["@babel/preset-env", "@babel/preset-react"],
-        //   plugins: ["@babel/plugin-proposal-class-properties"],
-        // },
-        exclude: "/node_modules",
-        use: ["babel-loader"],
+        loader: "babel-loader",
+        options: {
+          presets: [
+            "@babel/preset-env",
+            ["@babel/preset-react", { runtime: "automatic" }],
+          ],
+          // plugins: ["@babel/plugin-proposal-class-properties"],
+        },
+        // exclude: "/node_modules",
+        // use: ["babel-loader"],
       },
       {
         test: /\.css$/,
@@ -42,7 +49,7 @@ module.exports = {
         test: /\.(jpg|png)$/i,
         // use: [
         //   {
-        loader: "file-loader",
+        use: ["file-loader"],
         //     options: {
         //       name: "[name].[ext]",
         //     },
